@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block titulo %}Eliminar Suscripción | Netflix Users{% endblock %}
+
+{% block contenido %}
+<h2>¿Estás seguro de que quieres borrar esta suscripción?</h2>
+<p>La suscripción es para {{ suscripcion.usuario.nombre }} {{ suscripcion.usuario.apellido }} con inicio el {{ suscripcion.fecha_inicio|date:"d M Y" }}.</p>
+<p>Esta acción no se puede deshacer.</p>
+<form method="post">
+    {% csrf_token %}
+    <div class="actions">
+        <button type="submit" class="btn btn-danger">Sí, Borrar Suscripción</button>
+        <a href="{% url 'app_usuarios:detalle_usuario' suscripcion.usuario.id %}" class="btn">Cancelar</a>
+    </div>
+</form>
+{% endblock %}

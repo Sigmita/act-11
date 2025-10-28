@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block titulo %}Iniciar Sesión | Netflix Users{% endblock %}
+
+{% block contenido %}
+<h2 style="text-align: center;">Iniciar Sesión</h2>
+<form method="post" class="form-styled small-form">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <div class="actions">
+        <button type="submit" class="btn btn-primary">Entrar</button>
+        <a href="{% url 'app_usuarios:listar_usuarios' %}" class="btn">Volver</a>
+    </div>
+    <p style="text-align: center; margin-top: 1rem;">
+        ¿No tienes cuenta? Crea una desde el <a href="{% url 'admin:index' %}">panel de administración</a>.
+    </p>
+</form>
+{% endblock %}

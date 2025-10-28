@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block titulo %}{{ titulo }} | Netflix Users{% endblock %}
+
+{% block contenido %}
+<h2>{{ titulo }}</h2>
+<p>Para: <strong>{{ usuario.nombre }} {{ usuario.apellido }}</strong> ({{ usuario.email }})</p>
+<form method="post" class="form-styled">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <div class="actions">
+        <button type="submit" class="btn btn-primary">Guardar Suscripción</button>
+        <a href="{% url 'app_usuarios:detalle_usuario' usuario.id %}" class="btn">Cancelar</a>
+    </div>
+</form>
+{% endblock %}

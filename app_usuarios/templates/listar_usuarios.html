@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block titulo %}Usuarios | Netflix Users{% endblock %}
+
+{% block contenido %}
+<div class="page-header">
+    <h2>Gestión de Usuarios</h2>
+    {% if user.is_authenticated %}
+        <a href="{% url 'app_usuarios:crear_usuario' %}" class="btn btn-primary">+ Agregar Usuario</a>
+    {% endif %}
+</div>
+
+<ul class="user-grid">
+    {% for usuario in usuarios %}
+    <li class="user-card">
+        <a href="{% url 'app_usuarios:detalle_usuario' usuario.id %}">
+            {% if usuario.foto_perfil %}
+                <img src="{{ usuario.foto_perfil.url }}" alt="Foto de perfil de {{ usuario.nombre }}" class="user-profile-img">
+            {% else %}
+                <div class="user-icon">👤</div>
+            {% endif %}
+            <div class="user-info">
+                <h3>{{ usuario.nombre }} {{ usuario.apellido }}</h3>
+                <p class="user-email">{{ usuario.email }}</p>
+                <p class="user-membership">Membresía: <strong>{{ usuario.get_tipo_membresia_display }}</strong></p>
+                <p class="user-registration">Desde: {{ usuario.fecha_registro|date:"d M Y" }}</p>
+            </div>
+        </a>
+    </li>
+    {% empty %}
+    <li class="no-users">No hay usuarios registrados.</li>
+    {% endfor %}
+</ul>
+{% endblock %}

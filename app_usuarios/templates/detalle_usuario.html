@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% block titulo %}{{ usuario.nombre }} {{ usuario.apellido }} | Netflix Users{% endblock %}
+
+{% block contenido %}
+<article class="user-detail">
+    <div class="user-banner">
+        {% if usuario.foto_perfil %}
+            <img src="{{ usuario.foto_perfil.url }}" alt="Foto de perfil de {{ usuario.nombre }}" class="detail-profile-img">
+        {% else %}
+            <div class="detail-icon">👤</div>
+        {% endif %}
+        <div class="user-info">
+            <h1>{{ usuario.nombre }} {{ usuario.apellido }}</h1>
+            <p class="user-meta">
+                Email: {{ usuario.email }} | Membresía: <strong>{{ usuario.get_tipo_membresia_display }}</strong>
+            </p>
+            <p class="user-registration">Fecha de Registro: {{ usuario.fecha_registro|date:"d M Y" }}</p>
+        </div>
+    </div>
+
+    {% if user.is_authenticated %}
+    <div class="detail-actions">
+        <a href="{% url 'app_usuarios:editar_usuario' usuario.id %}" class="btn btn-secondary">✏️ Editar Usuario</a>
+        <a href="{% url 'app_usuarios:borrar_usuario' usuario.id %}" class="btn btn-danger">🗑️ Borrar Usuario</a>
+        <a href="{% url 'app_usuarios:crear_suscripcion' usuario.id %}" class="btn btn-primary">➕ Añadir Suscripción</a>
+    </div>
+    {% else %}
+    <p class="login-message">Inicia sesión para ver y gestionar los detalles de los usuarios y sus suscripciones.</p>
+    {% endif %}
+
+    <section class="subscriptions-section">
+        <h2>Suscripciones del Usuario</h2>
+        {% if suscripciones %}
+        <ul class="subscription-list">
+            {% for suscripcion in suscripciones %}
+            <li class="subscription-item">
+                <div class="subscription-details">
+                    <p>Inicio: {{ suscripcion.fecha_inicio|date:"d M Y" }}</p>
+                    <p>Fin: {% if suscripcion.fecha_fin %}{{ suscripcion.fecha_fin|date:"d M Y" }}{% else %}Indefinido{% endif %}</p>
+                    <p>Costo: ${{ suscripcion.costo_mensual|floatformat:2 }}</p>
+                    <p>Método de Pago: {{ suscripcion.get_metodo_pago_display|default:"N/A" }}</p>
+                </div>
+                {% if user.is_authenticated %}
+                <div class="subscription-actions">
+                    <a href="{% url 'app_usuarios:editar_suscripcion' suscripcion.id %}" class="btn btn-secondary btn-small">Editar</a>
+                    <a href="{% url 'app_usuarios:borrar_suscripcion' suscripcion.id %}" class="btn btn-danger btn-small">Borrar</a>
+                </div>
+                {% endif %}
+            </li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <p class="empty-message">Este usuario no tiene suscripciones registradas.</p>
+        {% endif %}
+    </section>
+</article>
+{% endblock %}
